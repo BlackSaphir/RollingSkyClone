@@ -12,7 +12,7 @@ public class Ball_Movement : MonoBehaviour
     [SerializeField]
     private float Jumpspeed;
 
-    private bool grounded;
+    private bool grounded = false;
     
 
 	// Use this for initialization
@@ -51,8 +51,6 @@ public class Ball_Movement : MonoBehaviour
         {
             this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y + Jumpspeed * Time.deltaTime, MovementVector.Z);
         }
-
-        
 
 
         // Moving forward all the time
