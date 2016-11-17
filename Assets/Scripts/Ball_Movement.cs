@@ -4,11 +4,11 @@ using System.Collections;
 public class Ball_Movement : MonoBehaviour
 {
     [SerializeField]
-    private float Speed;
+    private float Rightspeed;
     [SerializeField]
-    private float ForwardSpeed;
+    public float ForwardSpeed;
     [SerializeField]
-    public float Fallingspeed;
+    private float Fallingspeed;
     [SerializeField]
     private float Jumpspeed;
 
@@ -18,7 +18,7 @@ public class Ball_Movement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        Speed = 1.0f;
+        Rightspeed = 1.0f;
         Jumpspeed = 20.0f;
         ForwardSpeed = 10.0f;
         Fallingspeed = 15.0f;
@@ -39,12 +39,12 @@ public class Ball_Movement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
-            this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Speed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
+            this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Speed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
+            this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
         }
 
         if (Input.GetKey(KeyCode.Space))
