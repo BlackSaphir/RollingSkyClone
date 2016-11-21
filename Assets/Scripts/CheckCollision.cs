@@ -4,16 +4,16 @@ using System.Collections;
 public class CheckCollision : MonoBehaviour
 {
     public float distance;
-    public bool CheckIfCollision(GameObject Sphere, GameObject Cube)
+    public bool CheckIfCollision(GameObject Sphere, GameObject other)
     {
         // position = Center, localScale = Scale
-        float MinX = Cube.transform.position.x - (Cube.transform.localScale.x / 2);
-        float MinY = Cube.transform.position.y - (Cube.transform.localScale.y /2);
-        float MinZ = Cube.transform.position.z - (Cube.transform.localScale.z/2);
+        float MinX = other.transform.position.x - (other.transform.localScale.x / 2);
+        float MinY = other.transform.position.y - (other.transform.localScale.y /2);
+        float MinZ = other.transform.position.z - (other.transform.localScale.z/2);
 
-        float MaxX = Cube.transform.position.x + (Cube.transform.localScale.x /2);
-        float MaxY = Cube.transform.position.y + (Cube.transform.localScale.y /2);
-        float MaxZ = Cube.transform.position.z + (Cube.transform.localScale.z /2);
+        float MaxX = other.transform.position.x + (other.transform.localScale.x /2);
+        float MaxY = other.transform.position.y + (other.transform.localScale.y /2);
+        float MaxZ = other.transform.position.z + (other.transform.localScale.z /2);
 
 
         float X = Mathf.Max(MinX, Mathf.Min(Sphere.transform.position.x, MaxX));

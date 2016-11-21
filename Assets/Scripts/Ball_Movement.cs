@@ -23,9 +23,9 @@ public class Ball_Movement : MonoBehaviour
 	void Start ()
     {
         Rightspeed = 1.0f;
-        Jumpspeed = 200.0f;
+        Jumpspeed = 100.0f;
         ForwardSpeed = 10.0f;
-        Fallingspeed = .1f;
+        Fallingspeed = 0.1f;
         collisionCheck = GetComponent<CheckCollision>();
 	}
 	
