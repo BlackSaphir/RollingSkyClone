@@ -8,35 +8,21 @@ public class Ball_Movement : MonoBehaviour
     [SerializeField]
     public float ForwardSpeed;
     [SerializeField]
-    private float Fallingspeed;
-    [SerializeField]
-    private float Jumpspeed;
-    [SerializeField]
-    private bool grounded = false;
-
-    public GameObject box;
-
-    CheckCollision collisionCheck;
+    private float Jumpspeed;  
     
 
 	// Use this for initialization
 	void Start ()
     {
-        Rightspeed = 1.0f;
+        Rightspeed = 0.1f;
         Jumpspeed = 100.0f;
         ForwardSpeed = 10.0f;
-        Fallingspeed = 0.1f;
-        collisionCheck = GetComponent<CheckCollision>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        grounded = collisionCheck.CheckIfCollision(this.gameObject, box);
-        if (!grounded)
-        {
-            this.gameObject.transform.position = Vector3Self.Falling(this.gameObject, Fallingspeed);
-        }
+       
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
