@@ -4,7 +4,7 @@ using System.Collections;
 public class SphereCollision : MonoBehaviour
 {
     //[SerializeField]
-    public static float Fallingspeed=0f;
+    public static float Fallingspeed;
 
     SphereCollision collisionCheck;
 

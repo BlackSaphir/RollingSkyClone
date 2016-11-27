@@ -44,7 +44,7 @@ public class BoxCollider : MonoBehaviour
     void Update()
     {
         OnCollision = collisionCheck.CheckIfCollisionBox(Sphere, this.gameObject);
-        SphereCollision.Fallingspeed = 0.01f;
+        SphereCollision.Fallingspeed = 0.1f;
         if (OnCollision)
         {
 
@@ -64,7 +64,7 @@ public class BoxCollider : MonoBehaviour
             if (this.gameObject.tag == "JumpBox" && this.gameObject.layer == 8)
             {
                 SphereCollision.Fallingspeed = 0;
-                //Jump
+                //Jumpcode
             }
 
         }
