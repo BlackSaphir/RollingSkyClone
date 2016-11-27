@@ -7,9 +7,6 @@ public class SphereCollision : MonoBehaviour
     public static float Fallingspeed=0f;
 
     SphereCollision collisionCheck;
-    bool grounded = false;
-
-    public GameObject Box;
 
 
     void Start()
@@ -24,7 +21,7 @@ public class SphereCollision : MonoBehaviour
     }
 
     public float distance;
-    public bool CheckIfCollision(GameObject Sphere, GameObject other)
+    public bool CheckIfCollisionSphere(GameObject Sphere, GameObject other)
     {
         // position = Center, localScale = Scale
         float MinX = other.transform.position.x - (other.transform.localScale.x / 2);

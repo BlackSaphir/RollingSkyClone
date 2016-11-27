@@ -10,40 +10,8 @@ public class BoxCollider : MonoBehaviour
     public GameObject Sphere;
 
 
-    void Start()
-    {
-        collisionCheck = GetComponent<BoxCollider>();
-    }
-
-    void Update()
-    {
-       // SphereCollision.Fallingspeed = 0.1f;
-        OnCollision = collisionCheck.CheckIfCollision(Sphere, this.gameObject);
-        if (OnCollision)
-        {
-
-            if (this.gameObject.tag == "Obstacle")
-            {
-                Destroy(this.Sphere);
-            }
-
-            if (this.gameObject.layer == 8)
-            {
-                SphereCollision.Fallingspeed = 0;
-            }
-
-            if (this.gameObject.tag =="JumpBox")
-            {
-                SphereCollision.Fallingspeed = 0;
-                //Jump
-            }
-
-        }
-
-    }
-
     public float distance;
-    public bool CheckIfCollision(GameObject Sphere, GameObject Self)
+    public bool CheckIfCollisionBox(GameObject Sphere, GameObject Self)
     {
         // position = Center, localScale = Scale
         float MinX = Self.transform.position.x - (Self.transform.localScale.x / 2);
@@ -64,5 +32,42 @@ public class BoxCollider : MonoBehaviour
 
 
         return distance < Sphere.transform.localScale.y;
+    }
+
+
+    void Start()
+    {
+        collisionCheck = GetComponent<BoxCollider>();
+    }
+
+
+    void Update()
+    {
+        OnCollision = collisionCheck.CheckIfCollisionBox(Sphere, this.gameObject);
+        SphereCollision.Fallingspeed = 0.01f;
+        if (OnCollision)
+        {
+
+            // Obstacle
+            if (this.gameObject.tag == "Obstacle")
+            {
+                Destroy(this.Sphere);
+            }
+
+            // Ground
+            if (this.gameObject.layer == 8)
+            {
+                SphereCollision.Fallingspeed = 0;
+            }
+
+            // Jump
+            if (this.gameObject.tag == "JumpBox" && this.gameObject.layer == 8)
+            {
+                SphereCollision.Fallingspeed = 0;
+                //Jump
+            }
+
+        }
+
     }
 }
