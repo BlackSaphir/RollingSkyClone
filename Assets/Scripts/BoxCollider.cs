@@ -17,6 +17,7 @@ public class BoxCollider : MonoBehaviour
 
     void Update()
     {
+       // SphereCollision.Fallingspeed = 0.1f;
         OnCollision = collisionCheck.CheckIfCollision(Sphere, this.gameObject);
         if (OnCollision)
         {
@@ -26,7 +27,6 @@ public class BoxCollider : MonoBehaviour
                 Destroy(this.Sphere);
             }
 
-
             if (this.gameObject.layer == 8)
             {
                 SphereCollision.Fallingspeed = 0;
@@ -34,7 +34,8 @@ public class BoxCollider : MonoBehaviour
 
             if (this.gameObject.tag =="JumpBox")
             {
-
+                SphereCollision.Fallingspeed = 0;
+                //Jump
             }
 
         }
