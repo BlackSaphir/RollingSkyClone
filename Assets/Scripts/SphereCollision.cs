@@ -4,7 +4,7 @@ using System.Collections;
 public class SphereCollision : MonoBehaviour
 {
     //[SerializeField]
-    public static float Fallingspeed=0f;
+    public  float Fallingspeed=0f;
 
     SphereCollision collisionCheck;
 
@@ -38,9 +38,9 @@ public class SphereCollision : MonoBehaviour
         float Z = Mathf.Max(MinZ, Mathf.Min(Sphere.transform.position.z, MaxZ));
 
 
-        distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - (Sphere.transform.position.y + 0.5f)) * (Y - (Sphere.transform.position.y + 0.5f)) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
+        distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - (Sphere.transform.position.y)) * (Y - (Sphere.transform.position.y)) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
 
 
-        return distance < Sphere.transform.localScale.y;
+        return distance < Sphere.transform.localScale.y/2;
     }
 }
