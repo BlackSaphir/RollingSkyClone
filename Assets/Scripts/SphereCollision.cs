@@ -23,7 +23,7 @@ public class SphereCollision : MonoBehaviour
         float Y = Mathf.Max(MinY, Mathf.Min(Sphere.transform.position.y, MaxY));
         float Z = Mathf.Max(MinZ, Mathf.Min(Sphere.transform.position.z, MaxZ));
 
-        distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - (Sphere.transform.position.y)) * (Y - (Sphere.transform.position.y)) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
+        distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - Sphere.transform.position.y) * (Y - Sphere.transform.position.y) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
 
         return distance < Sphere.transform.localScale.y/2;
     }
@@ -40,5 +40,10 @@ public class SphereCollision : MonoBehaviour
     {      
         this.transform.position = Vector3Self.Falling(this.gameObject, Fallingspeed);
         this.transform.position = Vector3Self.Jumping(this.gameObject, JumpSpeed);
+
+        if (this.gameObject.transform.position.y < -7)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
