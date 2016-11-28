@@ -8,21 +8,21 @@ public class Ball_Movement : MonoBehaviour
     [SerializeField]
     public float ForwardSpeed;
     [SerializeField]
-    private float Jumpspeed;  
-    
+    private float Jumpspeed;
 
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start()
     {
         Rightspeed = 0.1f;
         Jumpspeed = 100.0f;
         ForwardSpeed = 10.0f;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-       
+
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -47,5 +47,5 @@ public class Ball_Movement : MonoBehaviour
 
         // Moving forward all the time
         this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);
-  	}
+    }
 }
