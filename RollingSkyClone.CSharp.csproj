@@ -66,6 +66,8 @@
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Ball_Movement.cs" />
     <Compile Include="Assets\Scripts\BoxCollider.cs" />
+    <Compile Include="Assets\Scripts\ButtonManager.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\SphereCollision.cs" />
     <Compile Include="Assets\Scripts\Vector3Self.cs" />
   </ItemGroup>

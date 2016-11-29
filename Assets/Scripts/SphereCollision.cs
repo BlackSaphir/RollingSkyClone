@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SphereCollision : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class SphereCollision : MonoBehaviour
             SoundSourceSphere.Play();
             }
             Destroy(this.gameObject, 2f);
+            SceneManager.LoadScene("LoseScene");
         }
     }
 }
