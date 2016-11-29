@@ -4,15 +4,18 @@ using System.Collections;
 public class BoxCollider : MonoBehaviour
 {
     public bool OnCollision;
-    public GameObject Sphere;
-    BoxCollider collisionCheck;
-    public bool isJumping;
-    public float timer;
+    public SphereCollision Sphere;
 
-    AudioSource SoundSource;
+    public bool IsJumping;
+    public float Timer;
+
     public AudioManager AudioContainer;
+    public float Distance;
 
-    public float distance;
+    private BoxCollider collisionCheck;
+    private AudioSource soundSource;
+    private BallMovement ballMovement;
+
     public bool CheckIfCollisionBox(GameObject Sphere, GameObject Self)
     {
         if (Sphere != null)
@@ -31,9 +34,9 @@ public class BoxCollider : MonoBehaviour
             float Y = Mathf.Max(MinY, Mathf.Min(Sphere.transform.position.y, MaxY));
             float Z = Mathf.Max(MinZ, Mathf.Min(Sphere.transform.position.z, MaxZ));
 
-            distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - Sphere.transform.position.y) * (Y - Sphere.transform.position.y) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
+            Distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - Sphere.transform.position.y) * (Y - Sphere.transform.position.y) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
 
-            return distance < Sphere.transform.localScale.y / 2;
+            return Distance < Sphere.transform.localScale.y / 2;
         }
 
         return false;
@@ -43,62 +46,74 @@ public class BoxCollider : MonoBehaviour
     void Start()
     {
         collisionCheck = GetComponent<BoxCollider>();
-        timer = 0f;
-        isJumping = false;
-        SoundSource = GetComponent<AudioSource>();
+        Timer = 0f;
+        IsJumping = false;
+        soundSource = GetComponent<AudioSource>();
+        ballMovement = Sphere.GetComponent<BallMovement>();
     }
 
     void Update()
     {
         if (Sphere != null)
         {
-            OnCollision = collisionCheck.CheckIfCollisionBox(Sphere, this.gameObject);
+            OnCollision = collisionCheck.CheckIfCollisionBox(Sphere.gameObject, this.gameObject);
             if (OnCollision)
-            {
-                // Ground
-                if (this.gameObject.layer == 8)
+            {// there is collision
+                if (!Sphere.Collisions.Contains(this)) // if this collider is not contained in previous collisions...
                 {
-                    Sphere.GetComponent<SphereCollision>().Fallingspeed = 0;
-                    timer = 0f;
-
-                    // JumpBox
-                    if (this.gameObject.tag == "JumpBox")
+                    Sphere.Collisions.Add(this); // ... then we have a new collision (CollisionEnter) and add it to the list of current collisions
+                    
+                    // Ground
+                    if (this.gameObject.layer == 8)
                     {
-                        //Sphere.GetComponent<AudioSource>().
-                        Sphere.GetComponent<SphereCollision>().JumpSpeed = 1;
-                        isJumping = true;
-                        SoundSource.clip = AudioContainer.au_Jump;
-                        SoundSource.Play();
-                    }
-                }
+                        Sphere.FallingSpeed = 0;
+                        Timer = 0f;
 
-                // Obstacle
-                if (this.gameObject.tag == "Obstacle")
-                {
-                    Sphere.GetComponent<Ball_Movement>().crashed = true;
-                    // Play Sound
-                    if (!SoundSource.isPlaying)
-                    {
-                        SoundSource.clip = AudioContainer.au_Collision;
-                        SoundSource.Play();
+                        // JumpBox
+                        if (this.gameObject.tag == "JumpBox")
+                        {
+                            Sphere.JumpSpeed = 1;
+                            IsJumping = true;
+                            soundSource.clip = AudioContainer.au_Jump;
+                            soundSource.Play();
+                        }
                     }
-                    Destroy(this.Sphere, 0.4f);
+
+                    // Obstacle
+                    else if (this.gameObject.tag == "Obstacle")
+                    {
+                        ballMovement.crashed = true;
+                        // Play Sound
+                        if (!soundSource.isPlaying)
+                        {
+                            soundSource.clip = AudioContainer.au_Collision;
+                            soundSource.Play();
+                        }
+                        Destroy(this.Sphere, 0.4f);
+                    }
                 }
             }
             else
-            {
-                if (this.gameObject.layer != 8)
-                    Sphere.GetComponent<SphereCollision>().Fallingspeed = 0.1f;
+            {// no collision
+                if (Sphere.Collisions.Contains(this)) // if this collider is contained in previous collisions...
+                {
+                    Sphere.Collisions.Remove(this); // ... then we remove it from the list of current collisions (CollisionExit)
+                }
+
+                if (Sphere.Collisions.Count == 0) // if there are no current collisions left...
+                {
+                    Sphere.FallingSpeed = 0.1f; // ... then start falling
+                }
             }
 
-
-            if (isJumping)
+            if (IsJumping)
             {
-                timer += Time.deltaTime;
-                if (timer > 0.5f)
+                Timer += Time.deltaTime;
+                if (Timer > 0.5f)
                 {
-                    Sphere.GetComponent<SphereCollision>().JumpSpeed = 0f;
-                    Sphere.GetComponent<SphereCollision>().Fallingspeed = 0.3f;
+                    Sphere.JumpSpeed = 0f;
+                    Sphere.FallingSpeed = 0.2f;
+                    IsJumping = false;
                 }
             }
         }

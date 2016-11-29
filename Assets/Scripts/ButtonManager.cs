@@ -6,6 +6,7 @@ public class ButtonManager : MonoBehaviour
 {
     public void start (string scene)
     {
+        Countdown.play = false;
         SceneManager.LoadScene(scene);
     }
 	
