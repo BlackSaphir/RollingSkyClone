@@ -9,8 +9,8 @@ public class BoxCollider : MonoBehaviour
     public bool isJumping;
     public float timer;
 
-    public AudioClip The_Joke_Is_On_You;
-    new AudioSource  audio;
+    AudioSource SoundSource;
+    public AudioManager AudioContainer;
 
     public float distance;
     public bool CheckIfCollisionBox(GameObject Sphere, GameObject Self)
@@ -45,18 +45,14 @@ public class BoxCollider : MonoBehaviour
         collisionCheck = GetComponent<BoxCollider>();
         timer = 0f;
         isJumping = false;
-
-        audio = GetComponent<AudioSource>();
+        SoundSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
         if (Sphere != null)
         {
-
-
             OnCollision = collisionCheck.CheckIfCollisionBox(Sphere, this.gameObject);
-
             if (OnCollision)
             {
                 // Ground
@@ -68,21 +64,25 @@ public class BoxCollider : MonoBehaviour
                     // JumpBox
                     if (this.gameObject.tag == "JumpBox")
                     {
+                        //Sphere.GetComponent<AudioSource>().
                         Sphere.GetComponent<SphereCollision>().JumpSpeed = 1;
                         isJumping = true;
+                        SoundSource.clip = AudioContainer.au_Jump;
+                        SoundSource.Play();
                     }
                 }
 
                 // Obstacle
                 if (this.gameObject.tag == "Obstacle")
                 {
-                    //PlaySound.Obstacle();
-
-                    audio.PlayOneShot(The_Joke_Is_On_You, 0.4f);
-
-                    //AudioSource audio = gameObject.AddComponent<AudioSource>();
-                    //audio.PlayOneShot((AudioClip)Resources.Load("Haha"));
-                    Destroy(this.Sphere, 5);
+                    Sphere.GetComponent<Ball_Movement>().crashed = true;
+                    // Play Sound
+                    if (!SoundSource.isPlaying)
+                    {
+                        SoundSource.clip = AudioContainer.au_Collision;
+                        SoundSource.Play();
+                    }
+                    Destroy(this.Sphere, 0.4f);
                 }
             }
             else
@@ -95,7 +95,6 @@ public class BoxCollider : MonoBehaviour
             if (isJumping)
             {
                 timer += Time.deltaTime;
-
                 if (timer > 0.5f)
                 {
                     Sphere.GetComponent<SphereCollision>().JumpSpeed = 0f;

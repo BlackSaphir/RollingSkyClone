@@ -7,6 +7,9 @@ public class SphereCollision : MonoBehaviour
     public float JumpSpeed;
     SphereCollision collisionCheck;
 
+    public AudioManager AudioContainer;
+    AudioSource SoundSourceSphere;
+
     public float distance;
     public bool CheckIfCollision(GameObject Sphere, GameObject other)
     {
@@ -33,7 +36,9 @@ public class SphereCollision : MonoBehaviour
         collisionCheck = GetComponent<SphereCollision>();
         Fallingspeed = 0.1f;
         JumpSpeed = 0f;
-        
+        SoundSourceSphere = GetComponent<AudioSource>();
+        SoundSourceSphere.clip = AudioContainer.au_BackBeat;
+        SoundSourceSphere.Play();
     }
 
     void Update()
@@ -41,9 +46,16 @@ public class SphereCollision : MonoBehaviour
         this.transform.position = Vector3Self.Falling(this.gameObject, Fallingspeed);
         this.transform.position = Vector3Self.Jumping(this.gameObject, JumpSpeed);
 
+        // die if below y < - 
         if (this.gameObject.transform.position.y < -7)
         {
-            Destroy(this.gameObject);
+            // play Sound
+            if (SoundSourceSphere.clip !=  AudioContainer.au_Death)
+            {
+            SoundSourceSphere.clip = AudioContainer.au_Death;
+            SoundSourceSphere.Play();
+            }
+            Destroy(this.gameObject, 2f);
         }
     }
 }

@@ -10,6 +10,8 @@ public class Ball_Movement : MonoBehaviour
     [SerializeField]
     private float Jumpspeed;
 
+    public bool crashed;
+
 
     // Use this for initialization
     void Start()
@@ -17,6 +19,7 @@ public class Ball_Movement : MonoBehaviour
         Rightspeed = 0.1f;
         Jumpspeed = 100.0f;
         ForwardSpeed = 10.0f;
+        crashed = false;
     }
 
     // Update is called once per frame
@@ -44,8 +47,10 @@ public class Ball_Movement : MonoBehaviour
             this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y + Jumpspeed * Time.deltaTime, MovementVector.Z);
         }
 
-
+        if (!crashed)
+        {
         // Moving forward all the time
         this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);
+        }
     }
 }
