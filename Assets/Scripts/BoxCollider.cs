@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class BoxCollider : MonoBehaviour
 {
     public bool OnCollision;
     public SphereCollision Sphere;
-
+    public GameObject VictoryCanvas;
+    public float VictoryTimer;
     public bool IsJumping;
     public float Timer;
-
+    public float TimerTillLoseScene;
+    public bool CheckTimerTillLoseScene;
     public AudioManager AudioContainer;
     public float Distance;
+    public bool Victory;
 
     private BoxCollider collisionCheck;
     private AudioSource soundSource;
@@ -50,6 +54,10 @@ public class BoxCollider : MonoBehaviour
         IsJumping = false;
         soundSource = GetComponent<AudioSource>();
         ballMovement = Sphere.GetComponent<BallMovement>();
+        TimerTillLoseScene = 0f;
+        CheckTimerTillLoseScene = false;
+        VictoryCanvas.SetActive(false);
+        Victory = false;
     }
 
     void Update()
@@ -59,10 +67,10 @@ public class BoxCollider : MonoBehaviour
             OnCollision = collisionCheck.CheckIfCollisionBox(Sphere.gameObject, this.gameObject);
             if (OnCollision)
             {// there is collision
-                if (!Sphere.Collisions.Contains(this)) // if this collider is not contained in previous collisions...
+                if (!Sphere.Collisions.Contains(this)) // if thhis collider doesnt exist already add it to the List
                 {
-                    Sphere.Collisions.Add(this); // ... then we have a new collision (CollisionEnter) and add it to the list of current collisions
-                    
+                    Sphere.Collisions.Add(this);
+
                     // Ground
                     if (this.gameObject.layer == 8)
                     {
@@ -77,12 +85,22 @@ public class BoxCollider : MonoBehaviour
                             soundSource.clip = AudioContainer.au_Jump;
                             soundSource.Play();
                         }
+
+                        // Victory
+                        if (this.gameObject.tag == "Victory")
+                        {
+                            Sphere.FallingSpeed = 0;
+                            Timer = 0f;
+                            ballMovement.Rightspeed = 0;
+                            VictoryCanvas.SetActive(true);
+                            Victory = true;
+                        }
                     }
 
                     // Obstacle
                     else if (this.gameObject.tag == "Obstacle")
                     {
-                        ballMovement.crashed = true;
+                        ballMovement.Crashed = true;
                         // Play Sound
                         if (!soundSource.isPlaying)
                         {
@@ -90,19 +108,28 @@ public class BoxCollider : MonoBehaviour
                             soundSource.Play();
                         }
                         Destroy(this.Sphere, 0.4f);
+                        CheckTimerTillLoseScene = true;
+                    }
+
+                    // Item
+                    if (this.gameObject.tag == "Item")
+                    {
+                        this.gameObject.SetActive(false);
+                        Sphere.Collisions.Remove(this);
                     }
                 }
             }
             else
-            {// no collision
-                if (Sphere.Collisions.Contains(this)) // if this collider is contained in previous collisions...
+            {
+                // no collision
+                if (Sphere.Collisions.Contains(this)) // if this collider already exist remove it
                 {
-                    Sphere.Collisions.Remove(this); // ... then we remove it from the list of current collisions (CollisionExit)
+                    Sphere.Collisions.Remove(this);
                 }
 
-                if (Sphere.Collisions.Count == 0) // if there are no current collisions left...
+                if (Sphere.Collisions.Count == 0) // No Collisions left start falling
                 {
-                    Sphere.FallingSpeed = 0.1f; // ... then start falling
+                    Sphere.FallingSpeed = 0.1f;
                 }
             }
 
@@ -117,6 +144,22 @@ public class BoxCollider : MonoBehaviour
                 }
             }
         }
+        if (CheckTimerTillLoseScene)
+        {
 
+            TimerTillLoseScene += Time.deltaTime;
+            if (TimerTillLoseScene >= 1.5f)
+            {
+                SceneManager.LoadScene("LoseScene");
+            }
+        }
+        if (Victory)
+        {
+            VictoryTimer += Time.deltaTime;
+            if (VictoryTimer > 3.1f)
+            {
+                SceneManager.LoadScene("VictoryScene");
+            }
+        }
     }
 }

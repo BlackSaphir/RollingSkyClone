@@ -4,28 +4,30 @@ using System.Collections;
 public class BallMovement : MonoBehaviour
 {
     [SerializeField]
-    private float Rightspeed;
-    [SerializeField]
     public float ForwardSpeed;
     [SerializeField]
     private float Jumpspeed;
+    [SerializeField]
+    private float SideMovement;
 
-    public bool crashed;
-
+    public float Rightspeed;
+    public bool Crashed;
+    Vector3Self MovementVector;
 
     // Use this for initialization
     void Start()
     {
-        Rightspeed = 0.1f;
         Jumpspeed = 100.0f;
         ForwardSpeed = 10.0f;
-        crashed = false;
+        Crashed = false;
+        Rightspeed = 18.0f;
     }
 
+#if UNITY_STANDALONE
     // Update is called once per frame
     void Update()
     {
-        if (Countdown.play)
+        if (Countdown.Play)
         {
 
             float horizontal = Input.GetAxis("Horizontal");
@@ -33,27 +35,41 @@ public class BallMovement : MonoBehaviour
 
             Vector3Self MovementVector = new Vector3Self(horizontal, vertical, 0);
 
-            if (Input.GetKey(KeyCode.D))
+            if (!Crashed)
             {
-                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
+                // Moving forward all the time
+                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X * Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);
             }
+        }
 
-            if (Input.GetKey(KeyCode.A))
+    }
+#endif
+#if UNITY_ANDROID
+    // Update is called once per frame
+    void Update()
+    {
+        if (Countdown.play)
+        {
+            MovementVector = new Vector3Self(0, 0, 0);
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
-                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X + Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z);
-            }
+                MovementVector.X = Input.GetTouch(0).deltaPosition.x;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y + Jumpspeed * Time.deltaTime, MovementVector.Z);
             }
 
             if (!crashed)
             {
                 // Moving forward all the time
-                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);
+                this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X * Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);
             }
         }
 
+    }
+#endif
+
+    // to change Speed in Game
+    void OnGUI()
+    {
+        Rightspeed = GUI.HorizontalSlider(new Rect(0, 0, 120, 20), Rightspeed, 0, 10);
     }
 }

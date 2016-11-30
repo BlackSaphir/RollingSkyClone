@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
-    public void start (string scene)
+    public void start(string scene)
     {
-        Countdown.play = false;
+        Countdown.Play = false;
         SceneManager.LoadScene(scene);
     }
-	
+
     public void exit()
     {
         Application.Quit();

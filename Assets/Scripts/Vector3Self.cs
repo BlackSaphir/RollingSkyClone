@@ -32,10 +32,10 @@ public class Vector3Self : MonoBehaviour
         return new Vector3Self(A.transform.position.x, A.transform.position.y, A.transform.position.z);
     }
 
-    public static Vector3Self Falling (GameObject B, float Fallingspeed)
+    public static Vector3Self Falling(GameObject B, float Fallingspeed)
     {
         return new Vector3Self(B.transform.position.x, B.transform.position.y - Fallingspeed, B.transform.position.z);
-    } 
+    }
 
     public static Vector3Self Jumping(GameObject C, float JumpspeedV)
     {

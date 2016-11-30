@@ -5,31 +5,21 @@ using System.Collections.Generic;
 public class SphereCollision : MonoBehaviour
 {
     public float JumpSpeed;
-    //SphereCollision collisionCheck;
-
     public AudioManager AudioContainer;
-    public float distance;
+    public float Distance;
+    public float Timer;
+    public float FallingSpeed;
 
     /// <summary>
     /// A List of Collideres this Collider is currently colliding with.
     /// </summary>
     public List<BoxCollider> Collisions;
 
-    private AudioSource SoundSourceSphere;
+    private AudioSource soundSourceSphere;
     private float fallingSpeed;
+    private bool died;
 
-    public float FallingSpeed
-    {
-        get
-        {
-            return fallingSpeed;
-        }
 
-        set
-        {
-            fallingSpeed = value;
-        }
-    }
 
     public bool CheckIfCollisionSphere(GameObject Sphere, GameObject other)
     {
@@ -49,9 +39,9 @@ public class SphereCollision : MonoBehaviour
             float Y = Mathf.Max(MinY, Mathf.Min(Sphere.transform.position.y, MaxY));
             float Z = Mathf.Max(MinZ, Mathf.Min(Sphere.transform.position.z, MaxZ));
 
-            distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - Sphere.transform.position.y) * (Y - Sphere.transform.position.y) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
+            Distance = Mathf.Sqrt((X - Sphere.transform.position.x) * (X - Sphere.transform.position.x) + (Y - Sphere.transform.position.y) * (Y - Sphere.transform.position.y) + (Z - Sphere.transform.position.z) * (Z - Sphere.transform.position.z));
 
-            return distance < Sphere.transform.localScale.y / 2;
+            return Distance < Sphere.transform.localScale.y / 2;
         }
 
         return false;
@@ -59,13 +49,11 @@ public class SphereCollision : MonoBehaviour
 
     void Start()
     {
-        //collisionCheck = GetComponent<SphereCollision>();
         FallingSpeed = 0.1f;
         JumpSpeed = 0f;
-        SoundSourceSphere = GetComponent<AudioSource>();
-        SoundSourceSphere.clip = AudioContainer.au_BackBeat;
-        SoundSourceSphere.Play();
-        
+        soundSourceSphere = GetComponent<AudioSource>();
+        soundSourceSphere.clip = AudioContainer.au_BackBeat;
+        soundSourceSphere.Play();
     }
 
     void Update()
@@ -77,13 +65,18 @@ public class SphereCollision : MonoBehaviour
         if (this.gameObject.transform.position.y < -7)
         {
             // play Sound
-            if (SoundSourceSphere.clip != AudioContainer.au_Death)
+            if (!died)
             {
-                SoundSourceSphere.clip = AudioContainer.au_Death;
-                SoundSourceSphere.Play();
+                soundSourceSphere.PlayOneShot(AudioContainer.au_Death[Random.Range(0, AudioContainer.au_Death.Length)], 1);
+                died = true;
             }
-            Destroy(this.gameObject, 2f);
-            SceneManager.LoadScene("LoseScene");
+            Timer += Time.deltaTime;
+            // load Scene
+            if (Timer > 3.8f)
+            {
+                Destroy(this.gameObject, 2f);
+                SceneManager.LoadScene("LoseScene");
+            }
         }
     }
 }
