@@ -9,6 +9,9 @@ public class SphereCollision : MonoBehaviour
     public float Distance;
     public float Timer;
     public float FallingSpeed;
+    public bool Victory;
+    public float VictoryTimer;
+    public GameObject VictoryCanvas;
 
     /// <summary>
     /// A List of Collideres this Collider is currently colliding with.
@@ -16,7 +19,6 @@ public class SphereCollision : MonoBehaviour
     public List<BoxCollider> Collisions;
 
     private AudioSource soundSourceSphere;
-    private float fallingSpeed;
     private bool died;
 
 
@@ -49,11 +51,13 @@ public class SphereCollision : MonoBehaviour
 
     void Start()
     {
-        FallingSpeed = 0.1f;
+        FallingSpeed = 4f;
         JumpSpeed = 0f;
         soundSourceSphere = GetComponent<AudioSource>();
         soundSourceSphere.clip = AudioContainer.au_BackBeat;
         soundSourceSphere.Play();
+        Victory = false;
+        VictoryCanvas.SetActive(false);
     }
 
     void Update()
@@ -76,6 +80,15 @@ public class SphereCollision : MonoBehaviour
             {
                 Destroy(this.gameObject, 2f);
                 SceneManager.LoadScene("LoseScene");
+            }
+        }
+
+        if (Victory)
+        {
+            VictoryTimer += Time.deltaTime;
+            if (VictoryTimer > 3.1f)
+            {
+                SceneManager.LoadScene("VictoryScene");
             }
         }
     }

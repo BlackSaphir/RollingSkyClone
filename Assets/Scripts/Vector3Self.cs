@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Vector3Self : MonoBehaviour
+public class Vector3Self 
 {
 
 
@@ -34,11 +34,11 @@ public class Vector3Self : MonoBehaviour
 
     public static Vector3Self Falling(GameObject B, float Fallingspeed)
     {
-        return new Vector3Self(B.transform.position.x, B.transform.position.y - Fallingspeed, B.transform.position.z);
+        return new Vector3Self(B.transform.position.x, B.transform.position.y - Fallingspeed * Time.deltaTime, B.transform.position.z);
     }
 
-    public static Vector3Self Jumping(GameObject C, float JumpspeedV)
+    public static Vector3Self Jumping(GameObject C, float Jumpspeed)
     {
-        return new Vector3Self(C.transform.position.x, C.transform.position.y + JumpspeedV, C.transform.position.z);
+        return new Vector3Self(C.transform.position.x, C.transform.position.y + Jumpspeed * Time.deltaTime, C.transform.position.z);
     }
 }

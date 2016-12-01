@@ -11,7 +11,6 @@ public class Countdown : MonoBehaviour
 
     private float timer = 4;
     private bool textbool = true;
-    private AudioSource soundSource;
 
 
     // Use this for initialization
@@ -19,6 +18,7 @@ public class Countdown : MonoBehaviour
     {
         MenuObject.SetActive(true);
         TextObject.text = string.Empty;
+        Utility.Points = 0;
     }
 
     // Update is called once per frame

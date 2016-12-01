@@ -5,25 +5,21 @@ public class BallMovement : MonoBehaviour
 {
     [SerializeField]
     public float ForwardSpeed;
-    [SerializeField]
-    private float Jumpspeed;
-    [SerializeField]
-    private float SideMovement;
-
+    public float JumpSpeed;
     public float Rightspeed;
     public bool Crashed;
     Vector3Self MovementVector;
 
+
     // Use this for initialization
-    void Start()
-    {
-        Jumpspeed = 100.0f;
-        ForwardSpeed = 10.0f;
-        Crashed = false;
-        Rightspeed = 18.0f;
-    }
 
 #if UNITY_STANDALONE
+    void Start()
+    {
+        ForwardSpeed = 10.0f;
+        Crashed = false;
+        Rightspeed = 20.0f;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -45,10 +41,21 @@ public class BallMovement : MonoBehaviour
     }
 #endif
 #if UNITY_ANDROID
+    void Start ()
+    {
+        JumpSpeed = 100f;
+        ForwardSpeed = 10.0f;
+        Crashed = false;
+        Rightspeed = 5;
+    }
+
+
     // Update is called once per frame
+
+
     void Update()
     {
-        if (Countdown.play)
+        if (Countdown.Play)
         {
             MovementVector = new Vector3Self(0, 0, 0);
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
@@ -57,7 +64,7 @@ public class BallMovement : MonoBehaviour
 
             }
 
-            if (!crashed)
+            if (!Crashed)
             {
                 // Moving forward all the time
                 this.gameObject.GetComponent<Transform>().transform.Translate(MovementVector.X * Rightspeed * Time.deltaTime, MovementVector.Y, MovementVector.Z + ForwardSpeed * Time.deltaTime);

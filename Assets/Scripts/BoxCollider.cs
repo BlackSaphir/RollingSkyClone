@@ -6,15 +6,12 @@ public class BoxCollider : MonoBehaviour
 {
     public bool OnCollision;
     public SphereCollision Sphere;
-    public GameObject VictoryCanvas;
-    public float VictoryTimer;
     public bool IsJumping;
     public float Timer;
     public float TimerTillLoseScene;
     public bool CheckTimerTillLoseScene;
     public AudioManager AudioContainer;
     public float Distance;
-    public bool Victory;
 
     private BoxCollider collisionCheck;
     private AudioSource soundSource;
@@ -56,8 +53,6 @@ public class BoxCollider : MonoBehaviour
         ballMovement = Sphere.GetComponent<BallMovement>();
         TimerTillLoseScene = 0f;
         CheckTimerTillLoseScene = false;
-        VictoryCanvas.SetActive(false);
-        Victory = false;
     }
 
     void Update()
@@ -75,12 +70,11 @@ public class BoxCollider : MonoBehaviour
                     if (this.gameObject.layer == 8)
                     {
                         Sphere.FallingSpeed = 0;
-                        Timer = 0f;
 
                         // JumpBox
                         if (this.gameObject.tag == "JumpBox")
                         {
-                            Sphere.JumpSpeed = 1;
+                            Sphere.JumpSpeed = 60;
                             IsJumping = true;
                             soundSource.clip = AudioContainer.au_Jump;
                             soundSource.Play();
@@ -90,10 +84,9 @@ public class BoxCollider : MonoBehaviour
                         if (this.gameObject.tag == "Victory")
                         {
                             Sphere.FallingSpeed = 0;
-                            Timer = 0f;
                             ballMovement.Rightspeed = 0;
-                            VictoryCanvas.SetActive(true);
-                            Victory = true;
+                            Sphere.VictoryCanvas.SetActive(true);
+                            Sphere.Victory = true;
                         }
                     }
 
@@ -114,6 +107,7 @@ public class BoxCollider : MonoBehaviour
                     // Item
                     if (this.gameObject.tag == "Item")
                     {
+                        Utility.Points += 1;
                         this.gameObject.SetActive(false);
                         Sphere.Collisions.Remove(this);
                     }
@@ -129,17 +123,18 @@ public class BoxCollider : MonoBehaviour
 
                 if (Sphere.Collisions.Count == 0) // No Collisions left start falling
                 {
-                    Sphere.FallingSpeed = 0.1f;
+                    Sphere.FallingSpeed = 4f;
                 }
             }
 
             if (IsJumping)
             {
                 Timer += Time.deltaTime;
-                if (Timer > 0.5f)
+                if (Timer > 0.4f)
                 {
                     Sphere.JumpSpeed = 0f;
-                    Sphere.FallingSpeed = 0.2f;
+                    Sphere.FallingSpeed = 30f;
+                    Timer = 0f; 
                     IsJumping = false;
                 }
             }
@@ -151,14 +146,6 @@ public class BoxCollider : MonoBehaviour
             if (TimerTillLoseScene >= 1.5f)
             {
                 SceneManager.LoadScene("LoseScene");
-            }
-        }
-        if (Victory)
-        {
-            VictoryTimer += Time.deltaTime;
-            if (VictoryTimer > 3.1f)
-            {
-                SceneManager.LoadScene("VictoryScene");
             }
         }
     }

@@ -6,7 +6,10 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject MenuObject;
 
-
+    public void start(string scene)
+    {   
+        SceneManager.LoadScene(scene);
+    }
 
     void Start()
     {
@@ -36,7 +39,7 @@ public class PauseMenu : MonoBehaviour
 
     public void EndGame(string scene)
     {
-        SceneManager.LoadScene(scene);
+        Application.Quit();
     }
 
     public void ResumeGame()
