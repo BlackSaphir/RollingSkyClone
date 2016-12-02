@@ -12,6 +12,10 @@ public class BoxCollider : MonoBehaviour
     public bool CheckTimerTillLoseScene;
     public AudioManager AudioContainer;
     public float Distance;
+    public string SceneToDelete;
+    public string SceneToLoad;
+    public bool DeleteScene;
+    public float TimerTillDelete;
 
     private BoxCollider collisionCheck;
     private AudioSource soundSource;
@@ -46,6 +50,7 @@ public class BoxCollider : MonoBehaviour
 
     void Start()
     {
+        Sphere = FindObjectOfType<SphereCollision>();
         collisionCheck = GetComponent<BoxCollider>();
         Timer = 0f;
         IsJumping = false;
@@ -53,6 +58,7 @@ public class BoxCollider : MonoBehaviour
         ballMovement = Sphere.GetComponent<BallMovement>();
         TimerTillLoseScene = 0f;
         CheckTimerTillLoseScene = false;
+        DeleteScene = false;
     }
 
     void Update()
@@ -78,6 +84,9 @@ public class BoxCollider : MonoBehaviour
                             IsJumping = true;
                             soundSource.clip = AudioContainer.au_Jump;
                             soundSource.Play();
+                            Application.LoadLevelAdditiveAsync(SceneToLoad);
+                            DeleteScene = true;
+
                         }
 
                         // Victory
@@ -133,8 +142,7 @@ public class BoxCollider : MonoBehaviour
                 if (Timer > 0.4f)
                 {
                     Sphere.JumpSpeed = 0f;
-                    Sphere.FallingSpeed = 30f;
-                    Timer = 0f; 
+                    Timer = 0f;
                     IsJumping = false;
                 }
             }
@@ -148,5 +156,18 @@ public class BoxCollider : MonoBehaviour
                 SceneManager.LoadScene("LoseScene");
             }
         }
+
+
+        if (DeleteScene)
+        {
+            TimerTillDelete += Time.deltaTime;
+            if (TimerTillDelete > 2.1f)
+            {
+                Application.UnloadLevel(SceneToDelete);
+            }
+        }
     }
+
+
+
 }

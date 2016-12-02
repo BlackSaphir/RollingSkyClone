@@ -8,6 +8,13 @@ public class ButtonManager : MonoBehaviour
     {
         Countdown.Play = false;
         SceneManager.LoadScene(scene);
+        Application.LoadLevelAdditiveAsync("BallScene");
+    }
+
+    public void BallScene(string BallScene)
+    {
+        Countdown.Play = false;
+        SceneManager.LoadScene(BallScene);
     }
 
     public void exit()

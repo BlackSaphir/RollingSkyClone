@@ -8,7 +8,6 @@ public class BallMovement : MonoBehaviour
     public float JumpSpeed;
     public float Rightspeed;
     public bool Crashed;
-    Vector3Self MovementVector;
 
 
     // Use this for initialization
@@ -18,7 +17,7 @@ public class BallMovement : MonoBehaviour
     {
         ForwardSpeed = 10.0f;
         Crashed = false;
-        Rightspeed = 20.0f;
+        Rightspeed = 13.0f;
     }
     // Update is called once per frame
     void Update()
@@ -46,7 +45,7 @@ public class BallMovement : MonoBehaviour
         JumpSpeed = 100f;
         ForwardSpeed = 10.0f;
         Crashed = false;
-        Rightspeed = 5;
+        Rightspeed = 4;
     }
 
 
@@ -57,7 +56,7 @@ public class BallMovement : MonoBehaviour
     {
         if (Countdown.Play)
         {
-            MovementVector = new Vector3Self(0, 0, 0);
+            Vector3Self MovementVector = new Vector3Self(0, 0, 0);
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 MovementVector.X = Input.GetTouch(0).deltaPosition.x;

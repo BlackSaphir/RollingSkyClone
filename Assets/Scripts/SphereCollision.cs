@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class SphereCollision : MonoBehaviour
 {
+    [SerializeField]
+    private string SceneToLoad;
+
     public float JumpSpeed;
     public AudioManager AudioContainer;
     public float Distance;
@@ -20,7 +23,6 @@ public class SphereCollision : MonoBehaviour
 
     private AudioSource soundSourceSphere;
     private bool died;
-
 
 
     public bool CheckIfCollisionSphere(GameObject Sphere, GameObject other)
@@ -51,13 +53,13 @@ public class SphereCollision : MonoBehaviour
 
     void Start()
     {
-        FallingSpeed = 4f;
         JumpSpeed = 0f;
         soundSourceSphere = GetComponent<AudioSource>();
         soundSourceSphere.clip = AudioContainer.au_BackBeat;
         soundSourceSphere.Play();
         Victory = false;
         VictoryCanvas.SetActive(false);
+        Application.LoadLevelAdditiveAsync(SceneToLoad);
     }
 
     void Update()
